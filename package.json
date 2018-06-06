@@ -1,5 +1,5 @@
 {
-  "name": "Plugins",
+  "name": "plugins",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "libphonenumber-js": "^1.2.15"
+    "libphonenumber-js": "^1.2.15",
+    "phone": "^2.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
