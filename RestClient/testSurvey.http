@@ -1,19 +1,30 @@
-#问卷来源
+#######问卷来源(问卷管理界面)###############
 
-#列表
-GET  http://192.168.26.39:8888/questionnaire_source/list?page=1&per_page=1 HTTP/1.1
+###列表
+GET  http://192.168.26.126:8888/questionnaire_source/list?page=1&per_page=15 HTTP/1.1
 
-###
+###单个查询
+GET  http://192.168.26.126:8888/questionnaire_source/5b1e0d2e140c1f862db8a0d0 HTTP/1.1
 
-GET  http://192.168.26.39:8888/questionnaire/list HTTP/1.1
 
-###
+###修改
 
-POST  http://localhost:3000/user HTTP/1.1
+POST  http://192.168.26.126:8888/questionnaire_source/5b1e0d2e140c1f862db8a0d0/update HTTP/1.1
 content-type: application/json
 
 {
-    "name": "陈季11112222",
-    "age": 27,
-    "gender": "male"
+  "name": "modifyName2",
+  "reward_cost": 10.0,
+  "delivery_cost": 20.0,
+  "channel_type": 1
 }
+
+#######号码库(号码包)###############
+
+###列表
+GET  http://192.168.26.126:8888/phone_package/list HTTP/1.1
+
+#######投放计划###############
+
+###列表
+GET  http://192.168.26.126:8888/delivery_plan/list HTTP/1.1
