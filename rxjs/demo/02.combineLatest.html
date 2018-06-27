@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>combineLatest</title>
+    <script src="https://unpkg.com/@reactivex/rxjs@5.0.0-beta.7/dist/global/Rx.umd.js"></script>
+</head>
+
+<body>
+    Weight:
+    <input type="number" id="weight"> kg
+    <br/> Height:
+    <input type="number" id="height"> cm
+    <br/> Your BMI is
+    <div id="bmi"></div>
+
+    <script>
+        // 只有既有身高又有体重的时候才会进行
+        let weight = document.getElementById('weight');
+        let height = document.getElementById('height');
+        let bmi = document.getElementById('bmi');
+
+        let weight$ = Rx.Observable
+            .fromEvent(weight, 'input')
+            .pluck('target', 'value');
+
+        let height$ = Rx.Observable
+            .fromEvent(height, 'input')
+            .pluck('target', 'value');
+
+        let bmi$ = Rx.Observable
+            .combineLatest(weight$, height$, (w, h) => w / (h * h / 100 / 100));
+
+        bmi$.subscribe(b => bmi.innerHTML = b);
+
+    </script>
+</body>
+
+</html>

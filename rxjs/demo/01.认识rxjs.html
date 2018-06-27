@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>认识rxjs</title>
+    <script src="https://unpkg.com/@reactivex/rxjs@5.0.0-beta.7/dist/global/Rx.umd.js"></script>
+</head>
+
+<body>
+    <input id="todo" type="text" />
+    <button id='addBtn'>Add</button>
+    <script>
+        let todo = document.getElementById('todo');
+        let input$ = Rx.Observable.fromEvent(todo, 'keyup');
+        input$
+            .filter(ev => ev.keyCode === 32) // 32对应着空格键（只有按了空格才会进行下一步）
+            // .map(ev => ev.target.value)
+            .pluck('target', 'value') // 上面的map操作常常使用，所以可以简化成pluck形式
+            .subscribe(value => console.log(value));
+
+        let addBtn = document.getElementById('addBtn');
+        let buttonClick$ = Rx.Observable.fromEvent(addBtn, 'click');
+        buttonClick$
+            .map(ev => 'clicked')
+            .subscribe(ev => console.log(ev)); // 上面两步可以使用mapTo进行简化（我自己使用mapTo没有看到效果）
+
+        // 合并操作符(combineLatest) 
+        // 当两个都有值的时候才会触发(第一次既要input输入值又要点击button，后续任何操作都会触发)
+        Rx.Observable.combineLatest(buttonClick$, input$, (ev, input) => {
+            return {
+                ev: ev,
+                input: input
+            }
+        })
+            .subscribe(value => console.log(value)) // value的值就是return的值
+
+
+    </script>
+</body>
+
+</html>
