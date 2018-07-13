@@ -1,3 +1,6 @@
+使用babel-node 执行es6 js
+
+项目：
 RestClient:测试htp请求的（使用插件rest client）
 
 phone: 测试全球的电话号码验证
