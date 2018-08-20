@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>认识rxjs</title>
+    <script src="https://unpkg.com/@reactivex/rxjs@5.0.0-beta.7/dist/global/Rx.umd.js"></script>
+    <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+</head>
+
+<body>
+    <button id='btn'>clickMe</button>
+    <script>
+        const btn = document.querySelector('#btn')
+        Rx.Observable.fromEvent(btn, 'click')
+            // .map(event => Rx.Observable.interval(1000).take(2))
+            // .switch() // 最新（内层）的Observable取代外层的Observable（可以去掉switch，查看log结果）
+            .switchMap(event => Rx.Observable.interval(1000).take(2)) // 相当于合并了map和switch // 连续点击两次，只会出现一次最新的
+            .mergeMap(event => Rx.Observable.interval(1000).take(2))  // 连续点击两次，合并数据流，同时显示出来00 11 22
+            .concatMap(event => Rx.Observable.interval(1000).take(2)) // 连续点击两次，会按照顺序输出 0 1 2 3 4 。。。。。0 1 2 3 4
+            .subscribe(x => console.log(x))
+
+
+
+        // btn.onclick = function(){
+        //     // 这种情况类似与mergeMap
+        //     Rx.Observable.interval(1000).take(2).subscribe(x => console.log(x))
+        // }
+
+            
+    </script>
+</body>
+
+</html>

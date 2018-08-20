@@ -27,12 +27,15 @@ const sequence = new Observable(sequenceSubscriber);
 // *****拆分完成****************
 
 // Create observer object
-// next是必须的，其他两个都可以不写
+// next是必须的，其他两个都可以不写（next可以理解成promise后面的.then）
 const myObserver = {
     next: x => console.log('Observer got a next value: ' + x), // 就算没有key也是可以的。等价 x => console.log('Observer got a next value: ' + x)
     error: err => console.error('Observer got an error: ' + err),
     complete: () => console.log('Observer got a complete notification'),
 };
+
+// 如果只有next，可以这样编写
+// const myObserver = x => console.log('Observer got a next value: ' + x)
 
 // Execute with the observer object
 myObservable.subscribe(myObserver);
