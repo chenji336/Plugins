@@ -1,6 +1,7 @@
 // babel-node 03.operators.js
-import { of, pipe } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { of, pipe, Observable, timer } from 'rxjs';
+import { map, filter, catchError, publish } from 'rxjs/operators';
+import { ajax } from 'rxjs/ajax';
 
 // 简单的operator操作，不使用pipe（这个有点不习惯，不过确实是最初的样子）
 function simpleOperate() {
@@ -41,4 +42,42 @@ function pipeFavorOperate() {
     );
     squareOdd.subscribe(x => console.log(x));
 }
-pipeFavorOperate();
+// pipeFavorOperate();
+
+// 错误处理
+function error() {
+    
+    // Return "response" from the API. If an error happens,
+    // return an empty array.
+    const apiData = ajax('/api/data').pipe(
+        map(res => {
+            console.log(res);
+            if (!res.response) {
+                throw new Error('Value expected!');
+            }
+            return res.response;
+        }),
+        catchError(err => of([])) // 可以注释掉查看效果
+    );
+
+    apiData.subscribe({
+        next(x) { console.log('data: ', x); },
+        error(err) { console.log('errors already caught... will not run'); }
+    });
+}
+// error();
+
+// 执行connect之后才发送数据
+function cold2hot() {
+    const hot = Observable.create((observer) => {
+       console.log('observer start');
+       observer.complete();
+    }).pipe(publish());
+    console.log('start');
+    hot.subscribe();
+    hot.connect();
+    console.log('after observalbe has been suscribed');
+    // hot.connect(); // 只会执行最后的connect，放在之里，那么顺序会改变
+}
+// cold2hot();
+
